@@ -1,0 +1,2 @@
+sketch: Ring.ino
+default_fqbn: esp8266:esp8266:nodemcu

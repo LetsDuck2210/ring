@@ -1,0 +1,3 @@
+namespace Ntfy {
+  void ring();
+}
