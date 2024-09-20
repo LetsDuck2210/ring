@@ -15,7 +15,7 @@ Planned Features:
 
 ## How to use
 
-Copy the file `secrets\_template.h` to `secrets.h`, then fill out all fields inside `secrets.h`.
+Copy the file `templates/secrets.h` to `secrets.h`, then fill out all fields inside `secrets.h`.
 
 Connect the ESP8266 to the computer, compile and upload. Example using arduino-cli:
 

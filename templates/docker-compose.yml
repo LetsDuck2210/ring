@@ -1,0 +1,12 @@
+services:
+  ntfy:
+  container_name: ntfy
+  image: binwiederhier/ntfy
+  restart: unless-stopped
+  ports:
+    - "80:80/tcp"
+  command: serve
+  volumes:
+    - ./ntfy/cache:/var/cache/ntfy
+    - ./ntfy/etc:/etc/ntfy
+    - ./ntfy/lib:/var/lib/ntfy
