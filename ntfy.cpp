@@ -2,7 +2,11 @@
 #include <arduino_base64.hpp>
 #include <ESP8266WiFi.h>
 
-#include "secrets.h"
+#if __has_include("secrets.h")
+  #include "secrets.h"
+#else
+  #error please create a secrets.h file
+#endif
 
 namespace Ntfy {
   const uint32_t MIN_RING_DELAY = 10000;

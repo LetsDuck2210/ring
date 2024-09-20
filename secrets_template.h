@@ -1,5 +1,3 @@
-#error please edit secrets.h and remove the first line
-
 // WiFi SSID and password
 inline const char* ssid = "";
 inline const char* pass = "";

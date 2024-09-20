@@ -1,8 +1,13 @@
+#if __has_include("secrets.h")
+  #include "secrets.h"
+#else
+  #error please create a secrets.h file
+#endif
+
 #include <Arduino.h>
 
 #include <ESP8266WiFi.h>
 
-#include "secrets.h"
 #include "ntfy.h"
 
 const uint8_t PIN_RING_BUTTON = D0;
