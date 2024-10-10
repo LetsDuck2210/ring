@@ -9,6 +9,7 @@
 #include <ESP8266WiFi.h>
 
 #include "ntfy.h"
+#include "src/server/webserver.h"
 
 const uint8_t PIN_RING_BUTTON = D0;
 const uint8_t PIN_RING_BELL = D6;
@@ -26,7 +27,10 @@ void setup() {
     delay(500);
   }
   WiFi.setHostname("ESPRing");
-  Serial.println("connected");
+  Serial.print("connected: ");
+  Serial.println(WiFi.localIP());
+
+  WebServer::setup();
 }
 
 uint32_t lastButtonChange = 0;
@@ -37,7 +41,7 @@ void loop() {
   if(millis() - lastButtonChange < 200) return;
   uint8_t value = digitalRead(PIN_RING_BUTTON);
   if(value != prevValue) {
-    Serial.printf("[%d] ring(%d) ... ", millis(), value);
+    Serial.printf("[%ld] ring(%d) ... ", millis(), value);
     lastButtonChange = millis();
     prevValue = value;
 
