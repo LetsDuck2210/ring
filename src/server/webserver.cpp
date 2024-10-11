@@ -20,13 +20,14 @@ namespace WebServer {
   uint8_t default_file = 0;
 
   void handle_requests(AsyncWebServerRequest* request);
+  void handle_api_request(AsyncWebServerRequest* request);
   void handle_not_found(AsyncWebServerRequest* request);
-  String toString(unsigned char* cstr, unsigned int len, size_t start = 0);
 
   void setup() {
-    server.on("/", handle_requests);
+    server.on("/", HTTP_GET, handle_requests);
     for(auto file : files)
-      server.on(file.filename.c_str(), handle_requests);
+      server.on(file.filename.c_str(), HTTP_GET, handle_requests);
+    server.on("^\\/api\\/([a-zA-Z]+)$", HTTP_GET, handle_api_request);
 
     server.onNotFound(handle_not_found);
     server.begin();
@@ -34,6 +35,7 @@ namespace WebServer {
 
   void handle_requests(AsyncWebServerRequest* request) {
     String url = request->url();
+    Serial.println("requested: " + url);
 
     if(url == "/") {
       auto file = files[default_file];
@@ -51,6 +53,9 @@ namespace WebServer {
     request->send(404, "text/html", request->url() + " not found");
   }
 
-  // String toString(unsigned char* cstr, unsigned int len, size_t start = 0) {
-  // }
+  void handle_api_request(AsyncWebServerRequest* request) {
+    Serial.println("api call: " + request->url());
+
+    request->send(200, "application/json", "{\"code\":1,\"message\":\"not implemented\"}");
+  }
 }
