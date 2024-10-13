@@ -10,6 +10,7 @@
 
 #include "ntfy.h"
 #include "src/server/webserver.h"
+#include "src/settings.h"
 
 const uint8_t PIN_RING_BUTTON = D0;
 const uint8_t PIN_RING_BELL = D6;
@@ -36,7 +37,6 @@ void setup() {
 uint32_t lastButtonChange = 0;
 uint32_t lastRing = 0;
 uint8_t prevValue = 0, ringCount = 0;
-const uint8_t MAX_RINGS_PER_INTERVAL = 2;
 void loop() {
   if(millis() - lastButtonChange < 200) return;
   uint8_t value = digitalRead(PIN_RING_BUTTON);
@@ -50,18 +50,24 @@ void loop() {
       return;
     }
 
-    if(millis() - lastRing < 5000 && ringCount >= MAX_RINGS_PER_INTERVAL) {
+    if(!Settings::is_bell_enabled()) {
+      Serial.println("Bell is disabled. Not ringing");
+      return;
+    }
+
+    const uint8_t bell_limit = Settings::get_bell_limit();
+    if(millis() - lastRing < 5000 && ringCount >= bell_limit) {
       Serial.printf("Last ring was %.2fs ago. Not ringing\n", (millis() - lastRing) / 1000.0);
       return;
     }
-    if(ringCount >= MAX_RINGS_PER_INTERVAL) ringCount = 0;
+    if(ringCount >= bell_limit) ringCount = 0;
 
     ringCount++;
     lastRing = millis();
 
-    Ntfy::ring();
     digitalWrite(PIN_RING_BELL, HIGH);
     delay(200);
     digitalWrite(PIN_RING_BELL, LOW);
+    Ntfy::ring();
   }
 }
